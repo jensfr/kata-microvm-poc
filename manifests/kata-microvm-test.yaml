@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kata-microvm-test
+spec:
+  runtimeClassName: kata
+  nodeName: kata-test-cluster-9kllc-worker-eastus1-q5z7l
+  containers:
+  - name: test
+    image: registry.access.redhat.com/ubi9/ubi-minimal:latest
+    command: ["sleep", "infinity"]
+  terminationGracePeriodSeconds: 0

@@ -1,0 +1,14 @@
+# Kata config drop-in for QEMU microvm with ACPI disabled
+# This is the workaround for the RHEL 5.14 ACPI bug.
+# The kernel boots and agent starts, but virtio interrupts don't work
+# because LAPIC/MSI setup requires ACPI. Vsock connections time out.
+#
+# This config is provided for reference. It is NOT a working solution.
+
+[hypervisor.qemu]
+path = "/usr/libexec/qemu-kvm-microvm"
+machine_type = "microvm"
+enable_iommu = false
+enable_iommu_platform = false
+kernel_params = "acpi=off cgroup_no_v1=all systemd.unified_cgroup_hierarchy=1"
+machine_accelerators = "auto-kernel-cmdline=on"

@@ -1,0 +1,13 @@
+# Kata Containers config drop-in for QEMU microvm machine type
+# Place at: /etc/kata-containers/config.d/20-microvm.toml
+#
+# NOTE: This configuration works for manual boot tests (1-3 devices).
+# The full Kata shim generates 6 virtio-mmio devices which triggers
+# an ACPI bug in RHEL 5.14 kernels. See README.md for details.
+
+[hypervisor.qemu]
+path = "/usr/libexec/qemu-kvm-microvm"
+machine_type = "microvm"
+enable_iommu = false
+enable_iommu_platform = false
+kernel_params = "cgroup_no_v1=all systemd.unified_cgroup_hierarchy=1"
