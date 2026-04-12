@@ -173,3 +173,18 @@ docs/shim-command-comparison.md     # Q35 vs microvm command line comparison
 ## Date
 
 2026-04-10
+
+## Update: ACPI bug fixed in QEMU 10.x
+
+Tested on a plain RHEL 9.4 Azure VM (kernel 5.14.0-427.61.1.el9_4.x86_64):
+
+| QEMU version | 4 virtio-mmio devices | Result |
+|-------------|----------------------|--------|
+| 9.2.0 | Hangs at "ACPI: Core revision" | BUG |
+| 10.2.2 | Boots, kernel runs normally | FIXED |
+
+**The bug was in QEMU's microvm ACPI table generation, not the RHEL kernel.**
+
+This means Kata with microvm machine type would work with QEMU 10.x without the pcie=on workaround. The qrun prototype uses pcie=on which works on both QEMU 9.x and 10.x.
+
+Reproducer VM: RHEL 9.4 on Azure (Standard_D4s_v5, nested virt), resource group `jfreiman-qemu-repro`.
