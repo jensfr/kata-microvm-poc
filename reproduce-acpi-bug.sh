@@ -1,7 +1,8 @@
 #!/bin/bash
 # Reproducer: QEMU microvm hangs at ACPI init with 4+ virtio-mmio devices
 #
-# Environment: RHEL 9.4, kernel 5.14.0-427.x, QEMU 9.2.0 (upstream)
+# Environment: RHEL 9.4, kernel 5.14.0-427.x
+# Tested with: QEMU 9.2.0 and 10.2.2 (upstream)
 # Reported by: Jens Freimann <jfreiman@redhat.com>
 # Date: 2026-04-10
 #
@@ -16,9 +17,18 @@
 #
 # Prerequisites:
 #   - RHEL 9.4 or RHCOS with kernel 5.14.0-427.x
-#   - Upstream QEMU 9.2.0 built with microvm support
-#   - KVM enabled (nested virt OK)
+#   - Upstream QEMU built with microvm support (9.2.0 or 10.2.2 tested)
+#   - KVM enabled (nested virt or bare metal)
 #   - A Linux kernel + initrd (the RHEL host kernel works)
+#
+# Quick setup on a RHEL 9.4 VM with KVM:
+#   curl -sL https://download.qemu.org/qemu-10.2.2.tar.xz | xz -d | tar x
+#   cd qemu-10.2.2 && mkdir build && cd build
+#   ../configure --target-list=x86_64-softmmu --enable-kvm
+#   make -j$(nproc) && strip build/qemu-system-x86_64
+#   cd ../..
+#   ./reproduce-acpi-bug.sh qemu-10.2.2/build/qemu-system-x86_64 \
+#       /boot/vmlinuz-$(uname -r) /boot/initramfs-$(uname -r).img
 #
 # Usage:
 #   ./reproduce-acpi-bug.sh /path/to/qemu-system-x86_64 /path/to/vmlinuz /path/to/initrd.img
