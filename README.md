@@ -187,4 +187,4 @@ Tested on a plain RHEL 9.4 Azure VM (kernel 5.14.0-427.61.1.el9_4.x86_64):
 
 This means Kata with microvm machine type would work with QEMU 10.x without the pcie=on workaround. The qrun prototype uses pcie=on which works on both QEMU 9.x and 10.x.
 
-Reproducer VM: RHEL 9.4 on Azure (Standard_D4s_v5, nested virt), resource group `jfreiman-qemu-repro`.
+Reproducer VM: RHEL 9.4 on Azure (Standard_D4s_v5, nested virt).
