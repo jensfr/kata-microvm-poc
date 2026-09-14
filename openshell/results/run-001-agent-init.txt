@@ -1,0 +1,42 @@
+# Kata VM cold start measurement -- Run 001 (agent-init)
+# Date: 2026-09-08
+# Node: virtlab725.virt.eng.rdu2.dc.redhat.com
+# OCP: 4.21, bare metal, 64-CPU Xeon
+# RuntimeClass: kata (with config drop-in overriding initrd)
+# Kernel: 5.14.0-570.107.1.el9_6.x86_64
+# Guest RAM: 2048 MB (stock default, no override)
+# SMP: -smp 1,cores=1,threads=1,sockets=64,maxcpus=64 (stock)
+# Debug logging: enabled
+# nodeName set (scheduler bypassed)
+#
+# Initrd: kata-bench.initrd (agent-init, stripped, 23 MB)
+#   SHA256: 71316e1f04e737cb2fcabba01977be2976633433e8bd52cc68d99c21a523af55
+#   /init: bash script (modprobe + exec kata-agent)
+#
+# Wall-clock measurement: Mac client → oc get pod polling (0.25s interval)
+# Shim timestamps: node journalctl -t kata
+# NOTE: Wall-clock (Mac) and shim timestamps (node) are from different clocks.
+#       Clock skew not measured.
+#
+# Sandbox ID: 9b275cf83d7f9379080b03eeff14be03efb5b1c2547f8cffbc880642c2f4b42f
+
+## Timestamps (shim journal, node clock)
+loaded_config:      2026-09-08T14:42:47.139305713Z
+starting_vm:        2026-09-08T14:42:47.185247262Z
+virtiofsd_start:    2026-09-08T14:42:47.186239454Z
+qemu_launch:        2026-09-08T14:42:47.186902181Z
+qmp_ready:          2026-09-08T14:42:47.211488371Z
+vm_started:         2026-09-08T14:42:47.268246735Z
+vsock_client:       2026-09-08T14:42:47.268487835Z
+container_started:  2026-09-08T14:42:49.703278118Z
+
+## Key intervals (node clock, ms)
+Starting VM → Container is started:  2518 ms
+QEMU launch → QMP ready:               25 ms
+QEMU launch → VM started:              81 ms
+VM started → Container is started:   2435 ms
+
+## Wall-clock (Mac clock, ms)
+T0 (oc apply):  1788878565.755
+T1 (Running):   1788878570.677
+Total:          4922 ms

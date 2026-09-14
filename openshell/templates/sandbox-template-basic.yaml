@@ -1,0 +1,28 @@
+# SandboxTemplate for OpenShell with annotation-based tuning.
+# Works today on stock OSC -- no initrd changes, no new RuntimeClass.
+# Reduces per-VM memory by ~46 MB (381 -> 335 MB) via annotations.
+
+apiVersion: extensions.agents.x-k8s.io/v1beta1
+kind: SandboxTemplate
+metadata:
+  name: openshell
+  namespace: openshell
+spec:
+  podTemplate:
+    metadata:
+      annotations:
+        # Reduce per-CPU data from 19 MB to 1.2 MB.
+        # Set to the max CPUs your workload needs. Default is 64 (host CPU count).
+        io.katacontainers.config.hypervisor.kernel_params: "nr_cpus=4"
+        # Reduce struct page array from 32 MB to 8 MB.
+        # Set to what your workload needs. Default is 2048.
+        io.katacontainers.config.hypervisor.default_memory: "512"
+    spec:
+      runtimeClassName: kata
+      containers:
+      - name: supervisor
+        image: <openshell-supervisor-image>
+        resources:
+          requests:
+            cpu: "2"
+            memory: "256Mi"

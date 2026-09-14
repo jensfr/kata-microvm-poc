@@ -1,0 +1,63 @@
+# Kata VM cold start benchmark -- combined results
+# Date: 2026-09-08
+# 20 runs total (10 pairs, alternating order)
+
+## Conditions (identical for both configurations)
+  Node:       virtlab725.virt.eng.rdu2.dc.redhat.com (bare metal, 64-CPU Xeon)
+  OCP:        4.21
+  Kernel:     5.14.0-570.107.1.el9_6.x86_64
+  Guest RAM:  2048 MB (stock default)
+  SMP:        -smp 1,cores=1,threads=1,sockets=64,maxcpus=64 (stock default)
+  Debug:      enable_debug = true
+  Image:      registry.access.redhat.com/ubi9/ubi-minimal:latest
+  nodeName:   set (scheduler bypassed)
+  Order:      alternating (agent-init, systemd, agent-init, ...)
+  Cleanup:    regular delete + 5s sleep between runs
+
+## Initrds
+  agent-init: kata-bench.initrd (23 MB, SHA256 prefix: 71316e1f)
+    /init: bash script, loads 5 modules, execs kata-agent. No chronyd.
+  stock:      kata.initrd (33 MB, SHA256 prefix: f1990711)
+    /init: symlink to usr/lib/systemd/systemd
+
+## Starting VM → Container is started (node clock, 10 runs each)
+
+  agent-init:  median=2540ms  min=2268  max=4667
+    [2268, 2397, 2470, 2475, 2508, 2571, 2686, 2827, 3303, 4667]
+
+  systemd:     median=5842ms  min=5405  max=7737
+    [5405, 5447, 5541, 5695, 5732, 5953, 6097, 6467, 6887, 7737]
+
+  Median difference: 3303ms (57% of systemd median)
+
+## QEMU launch → VM started (node clock, 10 runs each)
+
+  agent-init:  median=58ms  [55, 56, 56, 57, 58, 58, 70, 71, 75, 77]
+  systemd:     median=58ms  [55, 55, 57, 57, 58, 59, 59, 60, 68, 81]
+
+## Wall clock (Mac client, oc get pod → Running, 10 runs each)
+
+  agent-init:  median=5188ms  min=4390  max=6966
+  systemd:     median=8122ms  min=8034  max=10273
+
+## Caveats
+
+  - The agent-init initrd does not start chronyd. The production version
+    (Story 1) will include chronyd; its startup cost has not been measured.
+  - SV→Container includes initrd decompression, kernel boot, init process,
+    module loading, agent ttrpc ready, and container creation. These
+    sub-intervals are not separated in this measurement.
+  - Wall clock mixes Mac and node clocks. Clock skew not measured. Wall-clock
+    intervals are not subdivided into CRI-O, shim, and polling components.
+  - enable_debug = true for both. Production numbers may differ.
+  - Round 2 journal extraction initially failed due to CEST/UTC mismatch
+    in the query. Corrected; all 20 runs have shim timestamps.
+
+## Raw data
+
+  results/run-001-agent-init.txt              Single-run metadata + timestamps
+  results/run-002-stock-systemd.txt           Single-run metadata + timestamps
+  results/alternating-runs-3-12-summary.txt   Round 1 summary
+  results/alternating-runs-3-12-journal.txt   Round 1 raw journal (923 lines)
+  results/alternating-round2.csv              Round 2 CSV
+  results/alternating-round2-journal.txt      Round 2 raw journal (923 lines)

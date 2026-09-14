@@ -1,0 +1,11 @@
+run,type,initrd_hash,starting_vm,qemu_launch,qmp_ready,vm_started,container_started,sv_to_container_ms,qemu_to_vmstarted_ms,wall_ms,sandbox_id,status
+3,agent-init,71316e1f04e737cb,,,,,,,,5018,881972f5877c62ed3d3b8e59f1b3be3b9cc1857f5142f568a445c92b383ca92f,Running
+4,systemd,f1990711ca0532ca,,,,,,,,10273,7a478c10716edfb706f2adb6764f6270e7054c05826e5721ac2de3bf95e31cb4,Running
+5,agent-init,71316e1f04e737cb,,,,,,,,6966,36a7497a98824dba001187249fce49f70d45e9fc6ea215f2a1519d692df43f57,Running
+6,systemd,f1990711ca0532ca,,,,,,,,8084,7bb8993374e2a3a1175d3e0b99950b899c50d3533570a2532c382df7c691ed0a,Running
+7,agent-init,71316e1f04e737cb,,,,,,,,5170,9dcaf7d16c3c7f7ca52585743ccb1c8fdf36cf73521ee4ae06d9b5b63a74cc18,Running
+8,systemd,f1990711ca0532ca,,,,,,,,8161,4bfa491efbe441644dd2ca2746ace6ed67f67a82af63683245e397236e99c0ed,Running
+9,agent-init,71316e1f04e737cb,,,,,,,,5353,59ea4c144d2f060a68d77bf72a2632e8c958bfae17e47c47a30d70c2bddb7a86,Running
+10,systemd,f1990711ca0532ca,,,,,,,,8996,12b80db538ab1b017763f6c1aa19c1113f806836e7ca367502176fc62fad6754,Running
+11,agent-init,71316e1f04e737cb,,,,,,,,5411,aa8878310feb97dc3bf331d46e9f65d214d83db66585d21d866922a939628d33,Running
+12,systemd,f1990711ca0532ca,,,,,,,,8075,4f6493261474dd01b3baeb2708bf27238c96b40f63ae006a0b22024126f09ca0,Running

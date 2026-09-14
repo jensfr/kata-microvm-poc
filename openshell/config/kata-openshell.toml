@@ -1,0 +1,9 @@
+# Kata config drop-in for the kata-openshell RuntimeClass.
+# Place at /etc/kata-containers/config.d/50-openshell.toml
+# or use as the basis for a separate RuntimeClass config.
+
+[hypervisor.qemu]
+initrd = "/var/cache/kata-containers/osbuilder-images/kata-openshell.initrd"
+
+[runtime]
+enable_debug = false

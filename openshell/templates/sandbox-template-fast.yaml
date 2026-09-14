@@ -1,0 +1,24 @@
+# SandboxTemplate for OpenShell with fast boot (agent-init).
+# Requires the kata-openshell RuntimeClass and agent-init initrd.
+# Cold start: 2.78s (vs 5.89s stock). Memory: ~255 MB (vs 381 MB stock).
+
+apiVersion: extensions.agents.x-k8s.io/v1beta1
+kind: SandboxTemplate
+metadata:
+  name: openshell-fast
+  namespace: openshell
+spec:
+  podTemplate:
+    metadata:
+      annotations:
+        io.katacontainers.config.hypervisor.kernel_params: "nr_cpus=4"
+        io.katacontainers.config.hypervisor.default_memory: "512"
+    spec:
+      runtimeClassName: kata-openshell
+      containers:
+      - name: supervisor
+        image: <openshell-supervisor-image>
+        resources:
+          requests:
+            cpu: "2"
+            memory: "256Mi"

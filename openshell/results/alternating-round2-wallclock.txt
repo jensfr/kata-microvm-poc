@@ -1,0 +1,15 @@
+# Round 2 wall-clock only (journal not retained)
+# Runs 13-22, alternating agent-init/systemd
+# Same conditions as round 1
+
+Run  Type          Wall
+13   agent-init    5227ms
+14   systemd       9541ms
+15   agent-init    4390ms
+16   systemd       8696ms
+17   agent-init    4964ms
+18   systemd       8040ms
+19   agent-init    5206ms
+20   systemd       8084ms
+21   agent-init    4968ms
+22   systemd       8034ms

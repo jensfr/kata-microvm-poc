@@ -1,0 +1,11 @@
+# Kata config drop-in for the automotive kernel + virtio-blk test.
+# Place at /etc/kata-containers/config.d/50-automotive.toml
+
+[hypervisor.qemu]
+kernel = "/var/cache/kata-containers/vmlinuz-automotive"
+image = "/var/cache/kata-containers/kata-automotive.img"
+initrd = ""
+kernel_params = "nr_cpus=1 cgroup_no_v1=all"
+default_memory = 256
+disable_image_nvdimm = true
+block_device_driver = "virtio-blk"

@@ -1,0 +1,34 @@
+# Kata VM cold start measurement -- Run 002 (stock systemd)
+# Date: 2026-09-08
+# Node: virtlab725.virt.eng.rdu2.dc.redhat.com
+# OCP: 4.21, bare metal, 64-CPU Xeon
+# RuntimeClass: kata (with config drop-in overriding initrd to stock)
+# Kernel: 5.14.0-570.107.1.el9_6.x86_64
+# Guest RAM: 2048 MB (stock default)
+# SMP: -smp 1,cores=1,threads=1,sockets=64,maxcpus=64 (stock)
+# Debug logging: enabled
+# nodeName set (scheduler bypassed)
+#
+# Initrd: kata.initrd (stock systemd, 33 MB)
+#   SHA256: f1990711ca0532ca0e8d8d359fe67cd06fb50f7dec0b4091297778ed34c39e18
+#   /init: symlink → usr/lib/systemd/systemd
+#
+# Sandbox ID: 92a7d81cbd1a6ac828e4ae3a2f817d89b3b3d3d9e17e81cad077ad0470258e5a
+
+## Timestamps (shim journal, node clock)
+starting_vm:        2026-09-08T15:03:32.962974047Z
+qemu_launch:        2026-09-08T15:03:32.964635358Z
+qmp_ready:          2026-09-08T15:03:33.003106506Z
+vm_started:         2026-09-08T15:03:33.039070661Z
+container_started:  2026-09-08T15:03:41.575237881Z
+
+## Key intervals (node clock, ms)
+Starting VM → Container is started:  8612 ms
+QEMU launch → QMP ready:               38 ms
+QEMU launch → VM started:              74 ms
+VM started → Container is started:   8536 ms
+
+## Wall-clock (Mac clock, ms)
+T0 (oc apply):  1788879811.043
+T1 (Running):   1788879822.640
+Total:          11597 ms

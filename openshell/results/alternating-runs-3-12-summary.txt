@@ -1,0 +1,44 @@
+# Kata VM cold start benchmark -- alternating runs 3-12
+# Date: 2026-09-08
+# Node: virtlab725.virt.eng.rdu2.dc.redhat.com (bare metal, 64-CPU Xeon)
+# OCP: 4.21
+# Kernel: 5.14.0-570.107.1.el9_6.x86_64
+# Guest RAM: 2048 MB (stock default)
+# SMP: -smp 1,cores=1,threads=1,sockets=64,maxcpus=64
+# Debug: enable_debug = true
+# Image: registry.access.redhat.com/ubi9/ubi-minimal:latest
+# nodeName: set (scheduler bypassed)
+# Alternating order: agent-init, systemd, agent-init, systemd, ...
+# Regular delete + 5s sleep between runs
+#
+# agent-init initrd: kata-bench.initrd (23 MB)
+#   SHA256 prefix: 71316e1f04e737cb
+#   /init: bash script (modprobe 5 modules, exec kata-agent, NO chronyd)
+#
+# stock initrd: kata.initrd (33 MB)
+#   SHA256 prefix: f1990711ca0532ca
+#   /init: symlink → usr/lib/systemd/systemd
+#
+# Comparable interval: Starting VM → Container is started (node clock)
+
+Run  Type          SV→Container  QEMU→VS   Wall
+ 3   agent-init        2686ms      77ms    5018ms
+ 4   systemd           7737ms      59ms   10273ms
+ 5   agent-init        4667ms      70ms    6966ms
+ 6   systemd           5732ms      55ms    8084ms
+ 7   agent-init        2827ms      55ms    5170ms
+ 8   systemd           5953ms      81ms    8161ms
+ 9   agent-init        2470ms      57ms    5353ms
+10   systemd           6467ms      59ms    8996ms
+11   agent-init        2571ms      56ms    5411ms
+12   systemd           5695ms      57ms    8075ms
+
+Summary (SV→Container):
+  agent-init:  median=2686ms  min=2470  max=4667  n=5
+  systemd:     median=5953ms  min=5695  max=7737  n=5
+  median reduction: 3267ms (55%)
+
+Notes:
+  - Run 5 (agent-init 4667ms) and run 4 (systemd 7737ms) are outliers.
+  - PoC initrd does not start chronyd. Production will be slightly slower.
+  - QEMU startup (55-81ms) shows no difference between initrds.
